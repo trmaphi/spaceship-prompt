@@ -13,6 +13,7 @@ SPACESHIP_AWS_PREFIX="${SPACESHIP_AWS_PREFIX="using "}"
 SPACESHIP_AWS_SUFFIX="${SPACESHIP_AWS_SUFFIX="$SPACESHIP_PROMPT_DEFAULT_SUFFIX"}"
 SPACESHIP_AWS_SYMBOL="${SPACESHIP_AWS_SYMBOL="☁️ "}"
 SPACESHIP_AWS_COLOR="${SPACESHIP_AWS_COLOR="208"}"
+SPACESHIP_AWS_REGION_SHOW="${SPACESHIP_AWS_REGION_SHOW=true}"
 
 # ------------------------------------------------------------------------------
 # Section
@@ -27,11 +28,14 @@ spaceship_aws() {
 
   # Is the current profile not the default profile
   [[ -z $AWS_PROFILE ]] || [[ "$AWS_PROFILE" == "default" ]] && return
+  local 'AWS_REGION'
+
+  [[ $SPACESHIP_AWS_REGION_SHOW == true ]] && AWS_REGION="$( aws configure get region )"
 
   # Show prompt section
   spaceship::section \
     "$SPACESHIP_AWS_COLOR" \
     "$SPACESHIP_AWS_PREFIX" \
-    "${SPACESHIP_AWS_SYMBOL}$AWS_PROFILE" \
-    "$SPACESHIP_AWS_SUFFIX"
+    "${SPACESHIP_AWS_SYMBOL}$AWS_PROFILE "${AWS_REGION}"" \
+    "$SPACESHIP_AWS_SUFFIX" \
 }
